@@ -643,9 +643,12 @@ crash_log(struct ltask * t, service_id id, int sig) {
 		return;
 	}
 	const char *signame = sig_name(sig);
-	write(fd, signame, strlen(signame));
-	write(fd, "\n", 1);
-	write(fd, backtrace, n);
+	ssize_t ret;
+	ret = write(fd, signame, strlen(signame));
+	ret = write(fd, "\n", 1);
+	ret = write(fd, backtrace, n);
+	// Ignore result
+	(void)ret;
 	close(fd);
 #endif
 }
